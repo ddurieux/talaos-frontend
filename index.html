@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+
+<html>
+
+  <head>
+    <meta charset="utf-8" />
+    <title>GLPI 2.0</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/angular.js"></script>
+    <script src="js/angular-route.js"></script>
+    <script type="text/javascript" src="js/underscore-min.js"></script>
+    <script type="text/javascript" src="js/restangular.min.js"></script>
+    <script type="text/javascript" src="js/angular-filter.js"></script>
+    <script type="text/javascript" src="js/ui-bootstrap-0.11.2.min.js"></script>
+    
+    
+    <script src="app.js"></script>
+  </head>
+
+  <body>
+    <div ng-app="asset">
+    <div ng-view></div>
+  
+    <script type="text/ng-template" id="menu.html">
+    <header class="navbar navbar-inverse">
+      <div class="navbar-inner">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-3" ng-click="isCollapsed = !isCollapsed">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand visible-xs" href="#">UI Bootstrap</a>
+          </div>
+          <nav class="hidden-xs">
+            <ul class="nav navbar-nav">
+              <a href="#" role="button" class="navbar-brand">
+                  GLPI 2.0
+              </a>
+          <li ng-repeat="item in items | unique: 'menu' | orderBy:'menu'" ng-show="item.name" class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{item.menu}} <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                  <li ng-repeat="item1 in items | orderBy:'name' | filter:{'menu':item.menu}" ng-show="item.name">
+                      <a href="#{{item1.item}}">{{item1.name}}</a>
+                  </li>
+              </ul>
+          </li>
+        </ul>
+    </div>
+</li>  
+          </ul>
+          </nav>
+      </div>
+    </header>
+   </script>
+
+    <!-- CACHE FILE: home.html -->
+    <script type="text/ng-template" id="home.html">
+    <ng-include src="'menu.html'"></ng-include>
+    <div class="container-fluid">
+    <div class="row-fluid">
+    <pre>
+    
+    <h4>Hello in GLPI 2.0 !</h4>
+    </pre>
+    </div>
+    </div>
+    
+    </script>
+   
+   
+    <!-- CACHE FILE: list.html -->
+    <script type="text/ng-template" id="list.html">
+    <ng-include src="'menu.html'"></ng-include>
+    <div class="col-xs-2">
+      <input type="text" ng-model="search" class="form-control" placeholder="Search">
+      </div>
+      <table class="table table-striped table-condensed table-hover">
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Serial number</th>
+          <span ng-if="item.route == 'Asset'">
+            <th>Assettype</th>
+          </span>
+          <th><a href="#/{{list.route}}/new"><i class="glyphicon glyphicon-plus-sign"></i></a></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="item in list.data | filter:search | orderBy:'name'" ng-show="item.id">
+          <td>{{item.id}}</td>
+          <td>{{item.name}}</td>
+          <td>{{item.serial}}</td>
+          <span ng-if="item.route == 'Asset'">
+            <td>{{item.assettypes.name}}</td>
+          </span>
+          <td>
+            <a href="#/{{list.route}}/edit/{{item.id}}"><i class="glyphicon glyphicon-pencil"></i></a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+<pre>
+<button ng-click='previousPage()'>Previous</button>  Page: {{(list.meta.offset / list.meta.limit) + 1}} / {{list.meta.totalpage}} - <i>{{list.meta.total}} elements</i> <button ng-click='nextPage()'>Next</button>
+        </pre>
+    </script>
+  
+  
+  
+    <!-- CACHE FILE: detail.html -->
+    <script type="text/ng-template" id="detail.html">
+       <ng-include src="'menu.html'"></ng-include>
+      <div class="container-fluid">
+      <div class="row-fluid">
+      <form>
+      
+  <div class="well well-lg form-group">
+  <fieldset>
+    <legend>{{itemtypename}}</legend>
+            <div ng-repeat="(kitem, dt) in meta" ng-show="dt.label">
+            <span ng-switch on="dt.type">  
+              <span ng-switch-when="string">  
+                <label>{{dt.label}}</label>
+                <input ng-model="item[kitem]" type="text" class="form-control" />  
+              </span>  
+      
+              <span ng-switch-when="boolean">  
+                <label>
+                 <input ng-model="item[kitem]" ng-checked="item[kitem]" type="checkbox"/>  
+                 {{dt.label}}</label>
+              </span>  
+      
+              <span ng-switch-when="integer">  
+                <label>{{dt.label}}</label>
+                
+                <div ng-if="foreignlist[kitem]">
+                  <select name="item[kitem]" ng-model="item[kitem]"
+                        ng-options="sel.id as sel.name for sel in foreignlist[kitem].data"></select>
+                </div>
+                
+                <div ng-if="!foreignlist[kitem]">
+                <select class="form-control" ng-model="item[kitem]">
+                  <option>0</option>
+                  <option>1</option>
+                  <option>2</option>
+                  <option>3</option>
+                  <option>4</option>
+                  <option>5</option>
+                  <option>6</option>
+                  <option>7</option>
+                  <option>8</option>
+                  <option>9</option>
+                  <option>10</option>
+                  <option>11</option>
+                  <option>12</option>
+                  <option>13</option>
+                  <option>14</option>
+                  <option>15</option>
+                  <option>16</option>
+                  <option>17</option>
+                </select>    
+                </div>
+              </span>  
+      
+              <span ng-switch-when="datetime">  
+                <label>{{dt.label}}</label>
+                <div class="dropdown">
+                  <a class="dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#" href="#">
+                    <div class="input-group"><input type="text" class="form-control" data-ng-model="item[kitem]"><span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                    </div>
+                  </a>
+                  <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                    <datetimepicker data-ng-model="item[kitem]" data-datetimepicker-config="{ dropdownSelector: '#dropdown2' }"/>
+                  </ul>
+                </div>      
+              </span>
+
+              <span ng-switch-when="text">  
+                <label>{{dt.label}}</label>
+                <textarea ng-model="item[kitem]" type="text" class="form-control">{{item[kitem]}}</textarea>  
+              </span>
+    
+              <span ng-switch-default>  
+                  <strong>[ Unknown widget : {{dt.type}} ]</strong>  
+              </span>  
+            </span>         
+       
+            </div>
+     </fieldset>
+   </div>      
+
+        <span ng-if="itemtypename == 'Asset'">
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Asset type</label>
+              <select name="assettypes_id" ng-model="item.assettypes_id"
+                    ng-options="assettype.id as assettype.name for assettype in assettypes"></select>
+            </div>
+        </span>
+
+        <div class="well well-lg">Add
+        <span ng-repeat="(key, relatedmodel) in possiblerelatedmodels">
+            <button ng-click="addNewRelatedModel(key)" class="btn btn-primary">{{key}}</button>
+        </span>
+        </div>
+
+        <div class="form-group" data-ng-repeat="(key, relatedmodel) in relatedmodels track by key">
+            <div class="well well-lg form-group">
+  <fieldset>
+    <legend>{{key}}</legend>
+            <div ng-repeat="(kitem, item) in relatedmodel.meta" ng-show="item.label">
+       
+<span ng-switch on="item.type">  
+  <span ng-switch-when="string">  
+    <label>{{item.label}}</label>
+    <input ng-model="relatedmodel.data[kitem]" type="text" class="form-control" />  
+  </span>  
+  <span ng-switch-when="boolean">  
+    <label>
+     <input ng-model="relatedmodel.data[kitem]" ng-checked="relatedmodel.data[kitem]" type="checkbox"/>  
+     {{item.label}}</label>
+  </span>  
+  <span ng-switch-when="integer">  
+    <label>{{item.label}}</label>
+    <select class="form-control" ng-model="relatedmodel.data[kitem]">
+      <option>0</option>
+      <option>1</option>
+      <option>2</option>
+      <option>3</option>
+      <option>4</option>
+      <option>5</option>
+      <option>6</option>
+      <option>7</option>
+      <option>8</option>
+      <option>9</option>
+      <option>10</option>
+      <option>11</option>
+      <option>12</option>
+      <option>13</option>
+      <option>14</option>
+      <option>15</option>
+      <option>16</option>
+      <option>17</option>
+    </select>    
+  </span>  
+  <span ng-switch-default>  
+      <span class="form-control">Unknown widget</span>  
+  </span>  
+</span>         
+       
+            </div>
+     </fieldset>
+            </div>
+        </div>
+
+        <br>
+        <a href="#/{{item.route}}" class="btn btn-default">Cancel</a>
+        <button ng-click="save()" ng-disabled="isClean() || myForm.$invalid"
+                class="btn btn-primary">Save</button>
+        <button ng-click="destroy()"
+                ng-show="item.id" class="btn btn-danger">Delete</button>
+      </form>
+      </div>
+      </div>
+    </script>
+  </div>
+
+  </body>
+
+</html>
+
