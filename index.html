@@ -116,7 +116,7 @@
         </tbody>
       </table>
       <pre ng-if="list._items.length > 0">
-         <button ng-click='previousPage()'>Previous</button> {{list._meta.total}} elements</i> <button ng-click='nextPage()'>Next</button>
+         <button ng-click='previousPage()' ng-if='list._links.prev'>Previous</button> <i>Page {{list._meta.page}} | {{(list._meta.max_results * list._meta.page) - list._meta.max_results + 1}}-{{((list._meta.max_results * list._meta.page) - list._meta.max_results) + list._items.length}} ({{list._meta.total}} elements)</i> <button ng-click='nextPage()' ng-if='list._links.next'>Next</button>
       </pre>
     </script>
 <script type="text/ng-template" id="/queryBuilderDirective.html">

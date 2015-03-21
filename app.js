@@ -1,6 +1,6 @@
 var app = angular.module('asset', ['restangular', 'ngRoute', 'angular.filter', 'ui.bootstrap', 'ngSanitize', 'queryBuilder']);
         
-app.config(function($routeProvider, RestangularProvider, $rootScope) {
+app.config(function($routeProvider, RestangularProvider) {
     $routeProvider.
       when('/', {
         controller:homePage, 
@@ -75,10 +75,8 @@ app.controller('QueryBuilderCtrl', ['$scope', 'Restangular', '$http', '$rootScop
     
     $scope.sendToBackend = function() {
         $rootScope.$broadcast('item', {'items_': []});
-        if ($scope.urlpage === undefined) {
-            $scope.urlpage = 'asset?'
-        }
-        item = $http.post('http://10.0.20.9:5000/' + $scope.urlpage + 'embedded={"asset_type":1}', {"where": $scope.json}, {'headers': {"X-HTTP-Method-Override": "GET"}})
+        $rootScope.$broadcast('search', $scope.json);
+        item = $http.post('http://10.0.20.9:5000/asset?embedded={"asset_type":1}', {"where": $scope.json}, {'headers': {"X-HTTP-Method-Override": "GET"}})
            .then(function(data) {
                $rootScope.$broadcast('item', data.data);
            });
@@ -124,27 +122,31 @@ function ListCtrl($scope, Restangular, item) {
    $scope.items["asset"]["item"] = "asset";
    
     $scope.loadPage = function() {
-        Restangular.all('').customGET($scope.list._links.next.href)
+        $scope.list = {'items_': []};
+        Restangular.all($scope.urlpage).post({"where": $scope.search}, {}, {'X-HTTP-Method-Override': 'GET'})
                 .then(function(data) {
-                    $scope.list = data;
-            });
+           $scope.list = data         
+        });
     };
 
     $scope.nextPage = function() {
-        $rootScope.$broadcast('urlpage', $scope.list._links.next.href);
-        // $scope.loadPage();
+        $scope.urlpage = $scope.list._links.next.href;
+        $scope.loadPage();
     };
 
     $scope.previousPage = function() {
-        if ($scope.list.meta.offset > 0) {
-            $scope.list.meta.offset -= $scope.list.meta.limit;
-            $scope.loadPage();
-        }
+        $scope.urlpage = $scope.list._links.prev.href;
+        $scope.loadPage();
     };
     
    $scope.$on('item', function(event, msg) {
       $scope.list = msg
    });
+   
+   $scope.$on('search', function(event, msg) {
+      $scope.search = msg
+   });
+   
 }
 
 
@@ -252,31 +254,4 @@ function EditCtrl($scope, $location, Restangular, item) {
         }
         $location.path('/' + $scope.item.route);
     };
-}
-
-/*
- * parse_link_header()
- *
- * Parse the Github Link HTTP header used for pageination
- * http://developer.github.com/v3/#pagination
- */
-function parse_link_header(header) {
-  if (header.length == 0) {
-    throw new Error("input must not be of zero length");
-  }
-  // Split parts by comma
-  var parts = header.split(',');
-  var links = {};
-  // Parse each part into a named link
-  _.each(parts, function(p) {
-    var section = p.split(';');
-    if (section.length != 2) {
-      throw new Error("section could not be split on ';'");
-    }
-    var url = section[0].replace(/<(.*)>/, '$1').trim();
-    var name = section[1].replace(/rel="(.*)"/, '$1').trim();
-    links[name] = url;
-  });
- 
-  return links;
 }
