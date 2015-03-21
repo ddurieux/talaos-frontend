@@ -123,7 +123,7 @@ function ListCtrl($scope, Restangular, item) {
    
     $scope.loadPage = function() {
         $scope.list = {'items_': []};
-        Restangular.all($scope.urlpage).post({"where": $scope.search}, {}, {'X-HTTP-Method-Override': 'GET'})
+        Restangular.all($scope.urlpage + '&embedded={"asset_type":1}').post({"where": $scope.search}, {}, {'X-HTTP-Method-Override': 'GET'})
                 .then(function(data) {
            $scope.list = data         
         });
