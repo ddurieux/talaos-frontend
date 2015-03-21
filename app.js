@@ -1,6 +1,6 @@
-angular.module('asset', ['restangular', 'ngRoute', 'angular.filter', 'ui.bootstrap']).
+var app = angular.module('asset', ['restangular', 'ngRoute', 'angular.filter', 'ui.bootstrap', 'ngSanitize', 'queryBuilder']);
         
-  config(function($routeProvider, RestangularProvider) {
+app.config(function($routeProvider, RestangularProvider, $rootScope) {
     $routeProvider.
       when('/', {
         controller:homePage, 
@@ -39,7 +39,9 @@ angular.module('asset', ['restangular', 'ngRoute', 'angular.filter', 'ui.bootstr
       }).
       otherwise({redirectTo:'/'});
       
-      RestangularProvider.setBaseUrl('../public/index.php/v1');
+//      RestangularProvider.setBaseUrl('../public/index.php/v1');
+      RestangularProvider.setBaseUrl('http://10.0.20.9:5000');
+      
 //      RestangularProvider.setDefaultRequestParams({ apiKey: '4f847ad3e4b08a2eed5f3b54' })
       
       RestangularProvider.setRequestInterceptor(function(elem, operation, what) {
@@ -50,37 +52,87 @@ angular.module('asset', ['restangular', 'ngRoute', 'angular.filter', 'ui.bootstr
         }
         return elem;
       })
-
-//      RestangularProvider.addResponseInterceptor(function(data, operation, what, url, response) {
-//         return data;
-//      });
-      
   });
+
+app.controller('QueryBuilderCtrl', ['$scope', 'Restangular', '$http', '$rootScope', function ($scope, Restangular, $http, $rootScope) {
+    var data = '{"group": {"operator": "Intersection","rules": []}}';
+
+    function htmlEntities(str) {
+        return String(str).replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function computed(group) {
+        if (!group) return "";
+        for (var str = "(", i = 0; i < group.rules.length; i++) {
+            i > 0 && (str += " <strong>" + group.operator + "</strong> ");
+            str += group.rules[i].group ?
+                computed(group.rules[i].group) :
+                group.rules[i].field + " " + htmlEntities(group.rules[i].condition) + " " + group.rules[i].data;
+        }
+
+        return str + ")";
+    }
+    
+    $scope.sendToBackend = function() {
+        $rootScope.$broadcast('item', {'items_': []});
+        if ($scope.urlpage === undefined) {
+            $scope.urlpage = 'asset?'
+        }
+        item = $http.post('http://10.0.20.9:5000/' + $scope.urlpage + 'embedded={"asset_type":1}', {"where": $scope.json}, {'headers': {"X-HTTP-Method-Override": "GET"}})
+           .then(function(data) {
+               $rootScope.$broadcast('item', data.data);
+           });
+    }
+
+    $scope.$on('urlpage', function(event, msg) {
+       $scope.urlpage = msg + "&"
+       sendToBackend()
+    });
+
+    $scope.json = null;
+
+    $scope.filter = JSON.parse(data);
+
+    $scope.$watch('filter', function (newValue) {
+        $scope.json = JSON.stringify(newValue, null, 2);
+        $scope.output = computed(newValue.group);
+        $scope.output = $scope.json;
+    }, true);
+  }]);
+
 
 
 function homePage($scope, Restangular) {
-   $scope.items = Restangular.all("item").getList().$object;
+   //$scope.items = Restangular.all("item").getList().$object;
+   $scope.items = {};
+   $scope.items["asset"] = {};
+   $scope.items["asset"]["menu"] = "Asset";
+   $scope.items["asset"]["name"] = "Asset";
+   $scope.items["asset"]["item"] = "asset";
+   
 }
 
 
 function ListCtrl($scope, Restangular, item) {
    $scope.list = item;
-   $scope.list.meta.totalpage = Math.ceil($scope.list.meta.total / $scope.list.meta.limit);
-   $scope.items = Restangular.all("item").getList().$object;
-
+//   $scope.list.meta.totalpage = $scope.list._meta.total / $scope.list._meta.max_results;
+   //$scope.items = Restangular.all("item").getList().$object;
+   $scope.items = {};
+   $scope.items["asset"] = {};
+   $scope.items["asset"]["menu"] = "Asset";
+   $scope.items["asset"]["name"] = "Asset";
+   $scope.items["asset"]["item"] = "asset";
+   
     $scope.loadPage = function() {
-        Restangular.all(item.route).customGET('', {'offset':$scope.list.meta.offset})
+        Restangular.all('').customGET($scope.list._links.next.href)
                 .then(function(data) {
                     $scope.list = data;
-                    $scope.list.meta.totalpage = Math.ceil($scope.list.meta.total / $scope.list.meta.limit);
             });
     };
 
     $scope.nextPage = function() {
-        if (($scope.list.meta.offset + $scope.list.meta.limit) < $scope.list.meta.total) {
-            $scope.list.meta.offset += $scope.list.meta.limit;
-            $scope.loadPage();
-        }
+        $rootScope.$broadcast('urlpage', $scope.list._links.next.href);
+        // $scope.loadPage();
     };
 
     $scope.previousPage = function() {
@@ -89,7 +141,10 @@ function ListCtrl($scope, Restangular, item) {
             $scope.loadPage();
         }
     };
-
+    
+   $scope.$on('item', function(event, msg) {
+      $scope.list = msg
+   });
 }
 
 
