@@ -80,15 +80,27 @@
     <script type="text/ng-template" id="list.html">
     <ng-include src="'menu.html'"></ng-include>
     <div class="container" ng-controller="QueryBuilderCtrl">
-        <div class="alert alert-info">
+        <!--<div class="alert alert-info">
             <strong>Debug output</strong><br>
             <span ng-bind-html="output"></span>
+        </div>-->
+    <div class="panel panel-default">
+        <div class="panel-heading">Search</div>
+        <div class="panel-body">
+            <query-builder group="filter.group"></query-builder>
+            <center><button ng-click="sendToBackend()" class="btn btn-sm btn-success"><span class="glyphicon glyphicon-ok"></span> Validate</button></center>
         </div>
-        <query-builder group="filter.group"></query-builder>
-        <center><button ng-click="sendToBackend()" class="btn btn-sm btn-success"><span class="glyphicon glyphicon-ok"></span> Validate</button></center>
+    </div>
     </div>
     
 <!--      <input type="text" ng-model="search" class="form-control" placeholder="Search"> -->
+    <div class="panel panel-default">
+        <div class="panel-heading">t
+        <div style="margin-left: 5px" class="tbhzone tbhzone-right"><span class="glyphicon glyphicon-bullhorn"></span>
+            SHOW {{(list._meta.max_results * list._meta.page) - list._meta.max_results + 1}}-{{((list._meta.max_results * list._meta.page) - list._meta.max_results) + list._items.length}} OF {{list._meta.total}} ELEMENTS
+        </div>
+        </div>
+
       <table class="table table-striped table-condensed table-hover">
         <thead>
         <tr>
@@ -115,12 +127,13 @@
         </tr>
         </tbody>
       </table>
-      <pre ng-if="list._items.length > 0">
-         <button ng-click='previousPage()' ng-if='list._links.prev'>Previous</button> <i>Page {{list._meta.page}} | {{(list._meta.max_results * list._meta.page) - list._meta.max_results + 1}}-{{((list._meta.max_results * list._meta.page) - list._meta.max_results) + list._items.length}} ({{list._meta.total}} elements)</i> <button ng-click='nextPage()' ng-if='list._links.next'>Next</button>
-      </pre>
+        <div class="panel-footer"ng-if="list._items.length > 0">
+            <button ng-click='previousPage()' ng-if='list._links.prev'>Previous</button> <i>Page {{list._meta.page}}</i> <button ng-click='nextPage()' ng-if='list._links.next'>Next</button>        </div>
+      </div>
     </script>
 <script type="text/ng-template" id="/queryBuilderDirective.html">
-<div class="alert alert-warning alert-group">
+<!--<div class="alert alert-warning alert-group">-->
+<div>
     <div class="form-inline">
         <select ng-options="o.name as o.name for o in operators" ng-model="group.operator" class="form-control input-sm"></select>
         <button style="margin-left: 5px" ng-click="addCondition()" ng-if="displayAddCondition" class="btn btn-sm btn-success"><span class="glyphicon glyphicon-plus-sign"></span> Add Condition</button>
