@@ -27,7 +27,8 @@ body {
 }
 
 .table > thead > tr > th,
-.panel-heading {
+.panel-heading
+.btn-gradient{
     background: rgb(246,247,248); /* Old browsers */
     background: -moz-linear-gradient(top, rgba(246,247,248,1) 0%, rgba(231,234,241,1) 100%); /* FF3.6+ */
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(246,247,248,1)), color-stop(100%,rgba(231,234,241,1))); /* Chrome,Safari4+ */
@@ -43,7 +44,6 @@ body {
   padding: 1px 10px;
   margin-bottom: 0;
   font-size: 11px;
-  font-weight: bold;
   line-height: 1.5;
   text-align: center;
   white-space: nowrap;
@@ -59,13 +59,21 @@ body {
   border: 1px solid transparent;
   border-radius: 3px;
   color: #000;
+}
+
+.tbhzone-dark {
   background-color: #dcdfea;
   border-color: #d3d8e2;
+  font-weight: bold;
 }
 
 .tbhzone-right {
     position: absolute;    
     right: 5px;
+}
+
+.tbhzone-sm {
+    width: 100px;
 }
 
 .panel-default {
@@ -74,5 +82,5 @@ body {
 }
 
 .panel {
-    box-shadow: 0 1px 1px rgba(0,0,0,0.3);
+    box-shadow: 0 3px 3px rgba(0,0,0,0.3);
 }
