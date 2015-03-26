@@ -160,9 +160,9 @@
 <div>
     <div class="form-inline">
         <select ng-options="o.name as o.name for o in operators" ng-model="group.operator" class="form-control input-sm"></select>
-        <button style="margin-left: 5px" ng-click="addCondition()" ng-if="displayAddCondition" class="btn btn-sm btn-success"><span class="glyphicon glyphicon-plus-sign"></span> Add Condition</button>
-        <button style="margin-left: 5px" ng-click="addGroup()" ng-if="displayButtons" class="btn btn-sm btn-success"><span class="glyphicon glyphicon-plus-sign"></span> Add Group</button>
-        <button style="margin-left: 5px" ng-click="removeGroup()" class="btn btn-sm btn-danger"><span class="glyphicon glyphicon-minus-sign"></span> Remove Group</button>
+        <button style="margin-left: 5px" ng-click="addCondition()" ng-if="displayAddCondition" class="btn btn-sm btn-success"><span class="glyphicon glyphicon-plus-sign"></span> Condition</button>
+        <button style="margin-left: 5px" ng-click="addGroup()" ng-if="displayButtons" class="btn btn-sm btn-success"><span class="glyphicon glyphicon-plus-sign"></span> Group</button>
+        <button style="margin-left: 5px" ng-click="removeGroup()" class="btn btn-sm btn-danger"><span class="glyphicon glyphicon-minus-sign"></span> Group</button>
     </div>
     <div class="group-conditions">
         <div ng-repeat="rule in group.rules | orderBy:'index'" class="condition">
@@ -172,11 +172,15 @@
                 </div>
                 <div ng-switch-default="ng-switch-default">
                     <div class="form-inline">
-                        <select ng-options="t.id as t.name for t in assettypes | orderBy:'name'" ng-model="selectedAssettype" class="form-control input-sm" ng-change="assettypeChanged(selectedAssettype, $id, this)"></select>
-                        <select ng-if="this.fields.length > 0" ng-options="t.id as t.name for t in this.fields" ng-model="rule.field" class="form-control input-sm"></select>
-                        <select style="margin-left: 5px" ng-options="c.name as c.name for c in conditions" ng-model="rule.condition" class="form-control input-sm"></select>
-                        <input style="margin-left: 5px" type="text" ng-model="rule.data" class="form-control input-sm"/>
-                        / <select style="margin-left: 5px" ng-options="c.value as c.name for c in assetchild" ng-model="rule.assetchild" class="form-control input-sm"></select>
+                        <select ng-options="t.id as t.name for t in assettypes | orderBy:'name'" ng-model="selectedAssettype" class="form-control input-sm" ng-change="assettypeChanged(selectedAssettype, $id, this, rule)"></select>
+                        <select ng-if="this.fields.length > 0" ng-options="t.id as t.name for t in this.fields" ng-model="rule.field" class="form-control input-sm" ng-change="fieldSelected(selectedAssettype, assettypes, rule, $id, this)"></select>
+                        <select ng-if="rule.field" style="margin-left: 5px" ng-options="c.name as c.name for c in conditions" ng-model="rule.condition" class="form-control input-sm"></select>
+                        <input ng-if="rule.field && rule.field != 'assettype'" style="margin-left: 5px" type="text" ng-model="rule.data" class="form-control input-sm" ng-readonly="rule.field == 'assettype'"/>
+                        <!-- case rule.field = assettype -->
+                        <input ng-if="rule.field == 'assettype'" style="margin-left: 5px" type="text" class="form-control input-sm" ng-readonly="rule.field == 'assettype'"  ng-model="rule.dataname"/>
+                        <input ng-if="rule.field == 'assettype'"  type="hidden" ng-model="rule.data" />
+                        
+                        / <select ng-if="rule.field && rule.field != 'assettype'" style="margin-left: 5px" ng-options="c.value as c.name for c in assetchild" ng-model="rule.assetchild" class="form-control input-sm"></select>
                         <button style="margin-left: 5px" ng-click="removeCondition($index)" ng-if="displayButtons" class="btn btn-sm btn-danger"><span class="glyphicon glyphicon-minus-sign"></span></button>
                     </div>
                 </div>

@@ -69,7 +69,6 @@ app.controller('QueryBuilderCtrl', ['$scope', 'Restangular', '$http', '$rootScop
                 computed(group.rules[i].group) :
                 group.rules[i].field + " " + htmlEntities(group.rules[i].condition) + " " + group.rules[i].data;
         }
-
         return str + ")";
     }
     
