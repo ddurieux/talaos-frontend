@@ -200,6 +200,20 @@ function EditCtrl($scope, $location, Restangular, item, displaydetails) {
     $scope.item = Restangular.copy(original); 
     // * Get all properties
     $scope.properties = [];
+    $scope.load_links = function(param) {
+        Restangular.all('').get(param).then(function(data) {
+            if (data._items.length > 0) {
+                if ("_items" in $scope.child) {
+                    $scope.child._items.push.apply($scope.child._items, data._items);
+                } else {
+                    $scope.child = data;
+                }
+                if ("next" in data._links) {
+                    $scope.load_links(data._links.next.href + '&projection={"asset_right": 1}');
+                }
+            }
+        });
+    }
     $scope.load_properties = function() {
         Restangular.all('asset_property').get('?where={"asset_id":' + original.id + '}&embedded={"property_name":1,"asset_type_property":1}').then(function(data) {
             $scope.properties_values = data;
@@ -229,12 +243,9 @@ function EditCtrl($scope, $location, Restangular, item, displaydetails) {
         });
 
         // * Get child
-        Restangular.all('asset_asset').get('?where={"asset_left":' + original.id + '}').then(function(data) {
-            if (data._items.length > 0) {
-                $scope.child = data;
-            }
-        });
-    }    
+        $scope.child = [];
+        $scope.load_links('asset_asset?where={"asset_left":' + original.id + '}&projection={"asset_right": 1}');
+    }
     if (displaydetails) {
         $scope.load_properties();
     }
