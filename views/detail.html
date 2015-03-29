@@ -19,7 +19,6 @@
                     </div>                    
                 </fieldset>
             </div>      
-        </div>
         <br>
         <!--
         <a href="#/{{item.route}}" class="btn btn-default">Cancel</a>
@@ -27,10 +26,35 @@
             class="btn btn-primary">Save</button>
         <button ng-click="destroy()"
             ng-show="item.id" class="btn btn-danger">Delete</button> -->
-    </form>
-    <div ng-if="child">
-        <div ng-repeat="childitem in child._items">
-            <div class="dude" asset-id="childitem.asset_right"></div>
+        </form>
+    </div>
+
+        
+    <div class="container">        
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Children</div>
+                    <div ng-if="child">
+                        <ul class="list-group">
+                            <li ng-repeat="childitem in child._items" class="list-group-item">
+                                <div class="dude" asset-id="childitem.asset_right"></div>
+                            </li>                                
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Parents</div>
+                    <div class="panel-body">
+
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+        
+        
+
 </div>

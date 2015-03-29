@@ -185,6 +185,9 @@ function TestCtrl($scope, $location, Restangular) {
     Restangular.one('asset', $scope.assetId).get({'embedded': '{"asset_type":1}'}).then(function(data) {
         EditCtrl($scope, $location, Restangular, data, 0);
     });
+    $scope.close = function () {
+        EditCtrl($scope, $location, Restangular, $scope.item, 0);
+    }
 }
 
 function EditCtrl($scope, $location, Restangular, item, displaydetails) {
