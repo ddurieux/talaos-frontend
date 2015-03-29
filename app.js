@@ -192,6 +192,11 @@ function TestCtrl($scope, $location, Restangular) {
 
 function EditCtrl($scope, $location, Restangular, item, displaydetails) {
     var original = item;
+    $scope.items = {};
+    $scope.items["asset"] = {};
+    $scope.items["asset"]["menu"] = "Asset";
+    $scope.items["asset"]["name"] = "Asset";
+    $scope.items["asset"]["item"] = "asset";
     $scope.item = Restangular.copy(original); 
     // * Get all properties
     $scope.properties = [];
