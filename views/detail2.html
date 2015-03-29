@@ -1,0 +1,26 @@
+<div ng-if="properties.length == 0">
+    <button ng-click="load_properties()" ng-disabled="properties.length > 0" class="btn btn-default btn-xs">
+        {{item.name}} ({{item.asset_type.name}})
+    </button>
+</div>    
+<div class="row" ng-if="properties.length > 0">
+    <form class="form-horizontal">
+        <div class="well well-lg form-group">
+            <fieldset>
+                <legend>{{item.name}} ({{item.asset_type.name}})</legend>
+                <div class="row">
+                    <div class="col-md-4" ng-repeat-start="property in properties">
+                        <div class="form-group">
+                            <label for="{{property.label_id}}" class="col-sm-4 control-label">{{property.label}}</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="{{property.label_id}}" ng-model="property.value">
+                            </div>
+                        </div>        
+                    </div>
+                    <div class="clearfix" ng-if="$index%3==2"></div>
+                    <div ng-repeat-end=""></div>
+                </div>                    
+            </fieldset>
+        </div>      
+    </form>
+</div>

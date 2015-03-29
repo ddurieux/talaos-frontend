@@ -4,33 +4,36 @@ app.config(function($routeProvider, RestangularProvider) {
     $routeProvider.
       when('/', {
         controller:homePage, 
-        templateUrl:'home.html',
+        templateUrl:'views/home.html',
       }).
       when('/:item', {
         controller:ListCtrl, 
-        templateUrl:'list.html',
+        templateUrl:'views/list.html',
         resolve: {
           item: function(Restangular, $route){
-            var custom = '';
-            if ($route.current.params.item == 'Asset') {
-                custom = 'assettypes';
+            if ($route.current.params.item == 'asset') {
+                return {};
             }
-            return Restangular.all($route.current.params.item).customGET(custom);
+            return Restangular.all($route.current.params.item);
           }
         }
       }).
       when('/:item/edit/:itemId', {
         controller:EditCtrl, 
-        templateUrl:'detail.html',
+        templateUrl:'views/detail.html',
         resolve: {
           item: function(Restangular, $route){
-            return Restangular.one($route.current.params.item, $route.current.params.itemId).get();
-          }
+            if ($route.current.params.item == 'asset') {
+                 
+            }
+            return Restangular.one($route.current.params.item, $route.current.params.itemId).get({'embedded': '{"asset_type":1}'});
+          },
+          displaydetails: function() {return 1; }
         }
       }).
       when('/:item/new', {
           controller:CreateCtrl, 
-          templateUrl:'detail.html',
+          templateUrl:'views/detail.html',
           resolve: {
           item: function(Restangular, $route){
              return Restangular.one('item', $route.current.params.item).get();
@@ -167,11 +170,69 @@ function CreateCtrl($scope, $location, Restangular, item) {
   }
 }
 
-function EditCtrl($scope, $location, Restangular, item) {
+app.directive('dude', function($location, Restangular){
+  return {
+    restrict: "C"
+    , controller:TestCtrl
+    , scope: {
+        assetId: "="
+    }
+    , templateUrl:'views/detail2.html'
+  };
+});
+
+function TestCtrl($scope, $location, Restangular) {
+    Restangular.one('asset', $scope.assetId).get({'embedded': '{"asset_type":1}'}).then(function(data) {
+        EditCtrl($scope, $location, Restangular, data, 0);
+    });
+}
+
+function EditCtrl($scope, $location, Restangular, item, displaydetails) {
     var original = item;
-    $scope.item = Restangular.copy(original.data); 
-    $scope.meta = Restangular.copy(original.meta); 
+    $scope.item = Restangular.copy(original); 
+    // * Get all properties
+    $scope.properties = [];
+    $scope.load_properties = function() {
+        Restangular.all('asset_property').get('?where={"asset_id":' + original.id + '}&embedded={"property_name":1,"asset_type_property":1}').then(function(data) {
+            $scope.properties_values = data;
+            Restangular.all('asset_type_property').get('?where={"asset_type_id":' + original.asset_type_id + '}').then(function(data) {
+                // mix the values with the label to have good property
+                for (var key in data._items) {
+                    add = 0;
+                    for (var keyv in $scope.properties_values._items) {
+                        if ($scope.properties_values._items[keyv]['property_name']['asset_type_property_id'] == data._items[key]['id']) {
+                            $scope.properties.push({
+                                'label': data._items[key]['name'],
+                                'label_id': data._items[key]['id'],
+                                'value': $scope.properties_values._items[keyv]['property_name']['name']
+                            });
+                            add = 1;
+                        }
+                    }
+                    if (add == 0) {
+                        $scope.properties.push({
+                            'label': data._items[key]['name'],
+                            'label_id': data._items[key]['id'],
+                            'value': ''
+                        });  
+                    }
+                }
+            });
+        });
+
+        // * Get child
+        Restangular.all('asset_asset').get('?where={"asset_left":' + original.id + '}').then(function(data) {
+            if (data._items.length > 0) {
+                $scope.child = data;
+            }
+        });
+    }    
+    if (displaydetails) {
+        $scope.load_properties();
+    }
+/*    
     $scope.foreignlist = {};
+
     for (var field in $scope.item) {
         for (var key2 in $scope.meta[field]) {
             if (key2 == 'relationship') {
@@ -253,4 +314,5 @@ function EditCtrl($scope, $location, Restangular, item) {
         }
         $location.path('/' + $scope.item.route);
     };
+    */
 }
