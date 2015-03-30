@@ -200,6 +200,7 @@ function EditCtrl($scope, $location, Restangular, item, displaydetails) {
     $scope.item = Restangular.copy(original); 
     // * Get all properties
     $scope.properties = [];
+    $scope.childcat = {};
     $scope.load_links = function(param) {
         Restangular.all('').get(param).then(function(data) {
             if (data._items.length > 0) {
@@ -210,10 +211,37 @@ function EditCtrl($scope, $location, Restangular, item, displaydetails) {
                 }
                 if ("next" in data._links) {
                     $scope.load_links(data._links.next.href + '&projection={"asset_right": 1}');
+                } else {
+                    // We have all assets_id
+                    ids = [];
+                    for (var key in $scope.child._items) {
+                        ids.push($scope.child._items[key]['asset_right']);
+                    }
+                    $scope.child_categories = {};
+                    $scope.load_asset_assettype('asset?where={"id": ["' + ids.join('","') + '"]}');
                 }
             }
         });
     }
+
+    $scope.load_asset_assettype = function(param) {
+        Restangular.all('').get(param + '&embedded={"asset_type":1}').then(function(data) {
+            for (var key in data._items) {
+                if (!(data._items[key]['asset_type']['name'] in $scope.child_categories)) {
+                    $scope.child_categories[data._items[key]['asset_type']['name']] = [];
+                }
+                $scope.child_categories[data._items[key]['asset_type']['name']].push(
+                        {
+                            'name': data._items[key]['name'],
+                            'id': data._items[key]['id']
+                        });
+            }
+            if ("next" in data._links) {
+                $scope.load_asset_assettype(data._links.next.href);
+            }
+        });                    
+    }
+    
     $scope.load_properties = function() {
         Restangular.all('asset_property').get('?where={"asset_id":' + original.id + '}&embedded={"property_name":1,"asset_type_property":1}').then(function(data) {
             $scope.properties_values = data;
@@ -248,6 +276,9 @@ function EditCtrl($scope, $location, Restangular, item, displaydetails) {
     }
     if (displaydetails) {
         $scope.load_properties();
+    }
+    $scope.load_childcat = function(cat_name) {
+        $scope.childcat[cat_name] = $scope.child_categories[cat_name];
     }
 /*    
     $scope.foreignlist = {};

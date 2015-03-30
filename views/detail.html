@@ -32,19 +32,34 @@
         
     <div class="container">        
         <div class="row">
-            <div class="col-lg-6 col-md-6 col-sm-6">
+            <div class="col-lg-8 col-md-8 col-sm-8">
                 <div class="panel panel-default">
                     <div class="panel-heading">Children</div>
-                    <div ng-if="child">
-                        <ul class="list-group">
-                            <li ng-repeat="childitem in child._items" class="list-group-item">
-                                <div class="dude" asset-id="childitem.asset_right"></div>
-                            </li>                                
-                        </ul>
+                    <div ng-if="child" class="panel-heading">
+                        <br/>
+                        <div class="row" >
+                            <div class="col-md-4" ng-repeat-start="(cname, cproperty) in child_categories">
+                                <div class="panel panel-default assetblock" ng-click='load_childcat(cname)'>
+                                    <div class="panel-body">
+                                        <h1><strong>{{cproperty.length}}</strong></h1>
+                                        <p>{{cname}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix" ng-if="$index%3==2"></div>
+                            <div ng-repeat-end=""></div>
+                        </div>                    
+                        <div ng-repeat="(cname, cproperty) in child_categories">
+                            <ul class="list-group" ng-if="childcat[cname]">
+                                <li ng-repeat="childitem in childcat[cname]" class="list-group-item">
+                                    <div class="dude" asset-id="childitem.id"></div>
+                                </li>                                
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-6 col-md-6 col-sm-6">
+            <div class="col-lg-4 col-md-4 col-sm-4">
                 <div class="panel panel-default">
                     <div class="panel-heading">Parents</div>
                     <div class="panel-body">
