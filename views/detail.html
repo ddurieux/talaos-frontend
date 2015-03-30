@@ -51,7 +51,7 @@
                     </div>                    
                     <div ng-repeat="(cname, cproperty) in child_categories">
                         <ul class="list-group" ng-if="childcat[cname]">
-                            <li ng-repeat="childitem in childcat[cname]" class="list-group-item">
+                            <li ng-repeat="childitem in childcat[cname] | orderBy:'name'" class="list-group-item">
                                 <div class="dude" asset-id="childitem.id"></div>
                             </li>                                
                         </ul>
