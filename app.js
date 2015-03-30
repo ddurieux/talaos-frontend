@@ -278,7 +278,11 @@ function EditCtrl($scope, $location, Restangular, item, displaydetails) {
         $scope.load_properties();
     }
     $scope.load_childcat = function(cat_name) {
-        $scope.childcat[cat_name] = $scope.child_categories[cat_name];
+        if (cat_name in $scope.childcat) {
+            delete $scope.childcat[cat_name];
+        } else {
+            $scope.childcat[cat_name] = $scope.child_categories[cat_name];
+        }
     }
 /*    
     $scope.foreignlist = {};
