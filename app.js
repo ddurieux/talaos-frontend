@@ -77,8 +77,8 @@ app.controller('QueryBuilderCtrl', ['$scope', 'Restangular', '$http', '$rootScop
     
     $scope.sendToBackend = function() {
         $rootScope.$broadcast('item', {'items_': []});
-        $rootScope.$broadcast('search', $scope.json);
-        item = $http.post('http://10.0.20.9:5000/asset?embedded={"asset_type":1}', {"where": $scope.json}, {'headers': {"X-HTTP-Method-Override": "GET"}})
+        $rootScope.$broadcast('search', $scope.jsonclean);
+        item = $http.post('http://10.0.20.9:5000/asset?embedded={"asset_type":1}', {"where": $scope.jsonclean}, {'headers': {"X-HTTP-Method-Override": "GET"}})
            .then(function(data) {
                $rootScope.$broadcast('item', data.data);
            });
@@ -95,6 +95,7 @@ app.controller('QueryBuilderCtrl', ['$scope', 'Restangular', '$http', '$rootScop
 
     $scope.$watch('filter', function (newValue) {
         $scope.json = JSON.stringify(newValue, null, 2);
+        $scope.jsonclean = JSON.stringify(angular.copy(newValue), null, 2);
         $scope.output = computed(newValue.group);
         $scope.output = $scope.json;
     }, true);
