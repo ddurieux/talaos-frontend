@@ -11,6 +11,7 @@
         <div class="panel-body">
             <query-builder group="filter.group"></query-builder>
             <center><button ng-click="sendToBackend()" class="btn btn-sm btn-success"><span class="glyphicon glyphicon-ok"></span> Validate</button></center>
+            <div ng-show="searcherrordisplay" class="alert alert-danger" role="alert">{{searcherrormsg}}</div>
         </div>
     </div>
 </div>

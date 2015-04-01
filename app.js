@@ -79,6 +79,8 @@ app.controller('QueryBuilderCtrl', ['$scope', 'Restangular', '$http', '$rootScop
         $rootScope.$broadcast('item', {'items_': []});
         $rootScope.$broadcast('search', $scope.jsonclean);
         $rootScope.$broadcast('displayloading', true);
+        $rootScope.searcherrormsg = '';
+        $rootScope.searcherrordisplay = false;
         item = $http.post('http://10.0.20.9:5000/asset?embedded={"asset_type":1}', {"where": $scope.jsonclean}, {'headers': {"X-HTTP-Method-Override": "GET"}})
            .success(function(data) {
                $rootScope.$broadcast('item', data);
@@ -86,6 +88,8 @@ app.controller('QueryBuilderCtrl', ['$scope', 'Restangular', '$http', '$rootScop
            })
            .error(function(data, status, headers, config) {
                $rootScope.$broadcast('displayloading', false);
+               $rootScope.searcherrormsg = data || "Request failed";
+               $rootScope.searcherrordisplay = true;
            });
     }
 
