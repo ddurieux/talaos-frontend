@@ -96,3 +96,14 @@ body {
 .assetblock p {
     text-align:center;
 }
+
+.LoadingIndicator {
+    height: 200px;
+    width: 200px;
+    border-radius: 5px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 999;
+    background: url("../pics/search.gif") no-repeat scroll 0% 0% transparent;
+}

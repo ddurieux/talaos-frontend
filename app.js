@@ -78,9 +78,14 @@ app.controller('QueryBuilderCtrl', ['$scope', 'Restangular', '$http', '$rootScop
     $scope.sendToBackend = function() {
         $rootScope.$broadcast('item', {'items_': []});
         $rootScope.$broadcast('search', $scope.jsonclean);
+        $rootScope.$broadcast('displayloading', true);
         item = $http.post('http://10.0.20.9:5000/asset?embedded={"asset_type":1}', {"where": $scope.jsonclean}, {'headers': {"X-HTTP-Method-Override": "GET"}})
-           .then(function(data) {
-               $rootScope.$broadcast('item', data.data);
+           .success(function(data) {
+               $rootScope.$broadcast('item', data);
+               $rootScope.$broadcast('displayloading', false);
+           })
+           .error(function(data, status, headers, config) {
+               $rootScope.$broadcast('displayloading', false);
            });
     }
 
@@ -115,21 +120,22 @@ function homePage($scope, Restangular) {
 
 
 function ListCtrl($scope, Restangular, item) {
-   $scope.list = item;
-//   $scope.list.meta.totalpage = $scope.list._meta.total / $scope.list._meta.max_results;
-   //$scope.items = Restangular.all("item").getList().$object;
-   $scope.items = {};
-   $scope.items["asset"] = {};
-   $scope.items["asset"]["menu"] = "Asset";
-   $scope.items["asset"]["name"] = "Asset";
-   $scope.items["asset"]["item"] = "asset";
-   
+    $scope.list = item;
+    
+    $scope.items = {};
+    $scope.items["asset"] = {};
+    $scope.items["asset"]["menu"] = "Asset";
+    $scope.items["asset"]["name"] = "Asset";
+    $scope.items["asset"]["item"] = "asset";
+
     $scope.loadPage = function() {
         $scope.list = {'items_': []};
+        $scope.displayLoadingIndicator = true;
         Restangular.all($scope.urlpage + '&embedded={"asset_type":1}').post({"where": $scope.search}, {}, {'X-HTTP-Method-Override': 'GET'})
-                .then(function(data) {
-           $scope.list = data         
-        });
+           .then(function(data) {
+               $scope.list = data;
+               $scope.displayLoadingIndicator = false;
+            });
     };
 
     $scope.nextPage = function() {
@@ -149,7 +155,10 @@ function ListCtrl($scope, Restangular, item) {
    $scope.$on('search', function(event, msg) {
       $scope.search = msg
    });
-   
+
+   $scope.$on('displayloading', function(event, msg) {
+       $scope.displayLoadingIndicator = msg;
+   });
 }
 
 
