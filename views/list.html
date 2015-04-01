@@ -99,12 +99,10 @@
                         <select ng-options="t.id as t.name for t in assettypes | orderBy:'name'" ng-model="selectedAssettype" class="form-control input-sm" ng-change="assettypeChanged(selectedAssettype, $id, this, rule)"></select>
                         <select ng-if="this.fields.length > 0" ng-options="t.id as t.name for t in this.fields" ng-model="rule.field" class="form-control input-sm" ng-change="fieldSelected(selectedAssettype, assettypes, rule, $id, this)"></select>
                         <select ng-if="rule.field" style="margin-left: 5px" ng-options="c.name as c.name for c in conditions" ng-model="rule.condition" class="form-control input-sm"></select>
-                        <input ng-if="rule.field && rule.field != 'assettype'" style="margin-left: 5px" type="text" ng-model="rule.data" class="form-control input-sm" ng-readonly="rule.field == 'assettype'"/>
-                        <!-- case rule.field = assettype -->
-                        <input ng-if="rule.field == 'assettype'" style="margin-left: 5px" type="text" class="form-control input-sm" ng-readonly="rule.field == 'assettype'"  ng-model="rule.dataname"/>
-                        <input ng-if="rule.field == 'assettype'"  type="hidden" ng-model="rule.data" />
-                        
-                        / <select ng-if="rule.field && rule.field != 'assettype'" style="margin-left: 5px" ng-options="c.value as c.name for c in assetchild" ng-model="rule.assetchild" class="form-control input-sm"></select>
+                        <input ng-if="rule.field && rule.field != 0" style="margin-left: 5px" type="text" ng-model="rule.data" class="form-control input-sm"/>
+                        <input ng-if="rule.field == 0"  type="hidden" ng-model="rule.data" />
+                        <span ng-if="rule.field && rule.field != 0"> / </span>
+                        <select ng-if="rule.field && rule.field != 0" style="margin-left: 5px" ng-options="c.value as c.name for c in assetchild" ng-model="rule.assetchild" class="form-control input-sm"></select>
                         <button style="margin-left: 5px" ng-click="removeCondition($index)" ng-if="displayButtons" class="btn btn-sm btn-danger"><span class="glyphicon glyphicon-minus-sign"></span></button>
                     </div>
                 </div>

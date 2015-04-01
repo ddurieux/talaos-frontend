@@ -27,15 +27,15 @@ queryBuilder.directive('queryBuilder', ['$compile', '$http', function ($compile,
                     $http.get('http://10.0.20.9:5000/asset_type_property?where={"asset_type_id": "' + asset_type_id + '"}').
                         success(function(data) {
                             thisis.fields = data._items;
-                            thisis.fields.unshift({'name': '[This type]', 'id': 'assettype'});
+                            thisis.fields.unshift({'name': '[This type]', 'id': 0});
                             rule.field = 0;
+                            rule.data = asset_type_id;
                         });
                 }
 
                 scope.fieldSelected = function(selectedAssettype, assettypes, rule, id, thisis) {
-                    if (rule.field == 'assettype') {
+                    if (rule.field == 0) {
                         rule.data = _.find(assettypes, function(obj) { return obj.id == selectedAssettype }).id;
-                        rule.dataname = _.find(assettypes, function(obj) { return obj.id == selectedAssettype }).name;
                     } else {
                         rule.data = '';
                     }
