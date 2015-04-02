@@ -23,11 +23,23 @@ queryBuilder.directive('queryBuilder', ['$compile', '$http', function ($compile,
                 scope.displayAddCondition = true;
                 scope.fields = [];
                 
-                scope.assettypeChanged = function(asset_type_id, id, thisis) {
+                scope.assettypeChanged = function(asset_type_id, id, thisis, rule) {
                     $http.get('http://10.0.20.9:5000/asset_type_property?where={"asset_type_id": "' + asset_type_id + '"}').
                         success(function(data) {
                             thisis.fields = data._items;
+                            thisis.fields.unshift({'name': '[This type]', 'id': 0});
+                            rule.field = 0;
+                            rule.data = asset_type_id;
                         });
+                }
+
+                scope.fieldSelected = function(selectedAssettype, assettypes, rule, id, thisis) {
+                    if (rule.field == 0) {
+                        rule.data = _.find(assettypes, function(obj) { return obj.id == selectedAssettype }).id;
+                    } else {
+                        rule.data = '';
+                    }
+                    
                 }
                 
                 scope.assetchild = [

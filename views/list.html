@@ -1,0 +1,113 @@
+<ng-include src="'menu.html'"></ng-include>
+
+<div ng-show="displayLoadingIndicator" class="LoadingIndicator"></div>
+<div class="container" ng-controller="QueryBuilderCtrl">
+    <!--<div class="alert alert-info">
+        <strong>Debug output</strong><br>
+        <span ng-bind-html="output"></span>
+    </div>-->
+    <div class="panel panel-default">
+        <div class="panel-heading">Search</div>
+        <div class="panel-body">
+            <query-builder group="filter.group"></query-builder>
+            <center><button ng-click="sendToBackend()" class="btn btn-sm btn-success"><span class="glyphicon glyphicon-ok"></span> Validate</button></center>
+            <div ng-show="searcherrordisplay" class="alert alert-danger" role="alert">{{searcherrormsg}}</div>
+        </div>
+    </div>
+</div>
+
+<!--      <input type="text" ng-model="search" class="form-control" placeholder="Search"> -->
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div style="margin-left: 5px" class="tbhzone tbhzone-sm">
+        <button ng-click='previousPage()' ng-if='list._links.prev' class="btn btn-default btn-xs btn-gradient">
+            <span class="glyphicon glyphicon-chevron-left"></span> Previous</button>
+            </div>
+        <div style="margin-left: 5px" class="tbhzone tbhzone-sm">
+        Page {{list._meta.page}}
+            </div>
+        <div style="margin-left: 5px" class="tbhzone tbhzone-sm">
+        <button ng-click='nextPage()' ng-if='list._links.next' class="btn btn-default btn-xs btn-gradient">
+            Next <span class="glyphicon glyphicon-chevron-right"></span></button>
+            </div>
+        <div style="margin-left: 5px" class="tbhzone tbhzone-right tbhzone-dark"><span class="glyphicon glyphicon-bullhorn"></span>
+            SHOW {{(list._meta.max_results * list._meta.page) - list._meta.max_results + 1}}-{{((list._meta.max_results * list._meta.page) - list._meta.max_results) + list._items.length}} OF {{list._meta.total}} ELEMENTS
+            </div>
+        </div>
+
+        <table class="table table-striped table-condensed table-hover">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Serial number</th>
+                    <span ng-if="item.route == 'asset'">
+                        <th>Assettype</th>
+                    </span>
+                    <th><a href="#/{{list.route}}/new"><i class="glyphicon glyphicon-plus-sign"></i></a></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in list._items" ng-show="item.id" ng-if="list._items.length > 0">
+                    <td>{{item.id}}</td>
+                    <td>{{item.name}}</td>
+                    <td></td>
+                    <span ng-if="item.route == 'asset'">
+                        <td>{{item.asset_type.name}}</td>
+                    </span>
+                    <td>
+                        <a href="#/asset/edit/{{item.id}}"><i class="glyphicon glyphicon-pencil"></i></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="panel-heading" ng-if="list._items.length > 5">
+            <div style="margin-left: 5px" class="tbhzone tbhzone-sm">
+                <button ng-click='previousPage()' ng-if='list._links.prev' class="btn btn-default btn-xs btn-gradient">
+                <span class="glyphicon glyphicon-chevron-left"></span> Previous</button>
+            </div>
+            <div style="margin-left: 5px" class="tbhzone tbhzone-sm">
+                Page {{list._meta.page}}
+            </div>
+            <div style="margin-left: 5px" class="tbhzone tbhzone-sm">
+                <button ng-click='nextPage()' ng-if='list._links.next' class="btn btn-default btn-xs btn-gradient">
+                Next <span class="glyphicon glyphicon-chevron-right"></span></button>
+            </div>
+            <div style="margin-left: 5px" class="tbhzone tbhzone-right tbhzone-dark"><span class="glyphicon glyphicon-bullhorn"></span>
+                SHOW {{(list._meta.max_results * list._meta.page) - list._meta.max_results + 1}}-{{((list._meta.max_results * list._meta.page) - list._meta.max_results) + list._items.length}} OF {{list._meta.total}} ELEMENTS
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/ng-template" id="/queryBuilderDirective.html">
+<!--<div class="alert alert-warning alert-group">-->
+<div>
+    <div class="form-inline">
+        <select ng-options="o.name as o.name for o in operators" ng-model="group.operator" class="form-control input-sm"></select>
+        <button style="margin-left: 5px" ng-click="addCondition()" ng-if="displayAddCondition" class="btn btn-sm btn-success"><span class="glyphicon glyphicon-plus-sign"></span> Condition</button>
+        <button style="margin-left: 5px" ng-click="addGroup()" ng-if="displayButtons" class="btn btn-sm btn-success"><span class="glyphicon glyphicon-plus-sign"></span> Group</button>
+        <button style="margin-left: 5px" ng-click="removeGroup()" class="btn btn-sm btn-danger"><span class="glyphicon glyphicon-minus-sign"></span> Group</button>
+    </div>
+    <div class="group-conditions">
+        <div ng-repeat="rule in group.rules | orderBy:'index'" class="condition">
+            <div ng-switch="rule.hasOwnProperty('group')">
+                <div ng-switch-when="true">
+                    <query-builder group="rule.group"></query-builder>
+                </div>
+                <div ng-switch-default="ng-switch-default">
+                    <div class="form-inline">
+                        <select ng-options="t.id as t.name for t in assettypes | orderBy:'name'" ng-model="selectedAssettype" class="form-control input-sm" ng-change="assettypeChanged(selectedAssettype, $id, this, rule)"></select>
+                        <select ng-if="this.fields.length > 0" ng-options="t.id as t.name for t in this.fields" ng-model="rule.field" class="form-control input-sm" ng-change="fieldSelected(selectedAssettype, assettypes, rule, $id, this)"></select>
+                        <select ng-if="rule.field" style="margin-left: 5px" ng-options="c.name as c.name for c in conditions" ng-model="rule.condition" class="form-control input-sm"></select>
+                        <input ng-if="rule.field && rule.field != 0" style="margin-left: 5px" type="text" ng-model="rule.data" class="form-control input-sm"/>
+                        <input ng-if="rule.field == 0"  type="hidden" ng-model="rule.data" />
+                        <span ng-if="rule.field && rule.field != 0"> / </span>
+                        <select ng-if="rule.field && rule.field != 0" style="margin-left: 5px" ng-options="c.value as c.name for c in assetchild" ng-model="rule.assetchild" class="form-control input-sm"></select>
+                        <button style="margin-left: 5px" ng-click="removeCondition($index)" ng-if="displayButtons" class="btn btn-sm btn-danger"><span class="glyphicon glyphicon-minus-sign"></span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</script>
