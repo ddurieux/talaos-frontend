@@ -1,6 +1,6 @@
 <div ng-if="properties.length == 0">
     <button ng-click="load_properties()" ng-disabled="properties.length > 0" class="btn btn-link btn-xs">
-        {{item.name}}
+        {{item.name}} / {{item.id}}
     </button>
     <span class="pull-right">{{item.asset_type.name}}</span>
 </div>    
@@ -12,6 +12,9 @@
                     <legend>{{item.name}} ({{item.asset_type.name}})
                         <button ng-click="close()" class="btn pull-right btn-xs">
                             <span class="glyphicon glyphicon-remove-circle"></span>
+                        </button>
+                        <button ng-click="goAsset(item.id)" class="btn pull-right btn-xs">
+                            <span class="glyphicon glyphicon-pencil"></span>
                         </button>
                     </legend>
                     <div class="row">
