@@ -97,7 +97,7 @@
                 <div ng-switch-default="ng-switch-default">
                     <div class="form-inline">
                         <select ng-options="t.id as t.name for t in assettypes | orderBy:'name'" ng-model="selectedAssettype" class="form-control input-sm" ng-change="assettypeChanged(selectedAssettype, $id, this, rule)"></select>
-                        <select ng-if="this.fields.length > 0" ng-options="t.id as t.name for t in this.fields" ng-model="rule.field" class="form-control input-sm" ng-change="fieldSelected(selectedAssettype, assettypes, rule, $id, this)"></select>
+                        <select ng-if="this.fields.length > 0" ng-options="t.id as t.name for t in this.fields | orderBy:'name'" ng-model="rule.field" class="form-control input-sm" ng-change="fieldSelected(selectedAssettype, assettypes, rule, $id, this)"></select>
                         <select ng-if="rule.field" style="margin-left: 5px" ng-options="c.name as c.name for c in conditions" ng-model="rule.condition" class="form-control input-sm"></select>
                         <input ng-if="rule.field && rule.field != 0" style="margin-left: 5px" type="text" ng-model="rule.data" class="form-control input-sm"/>
                         <input ng-if="rule.field == 0"  type="hidden" ng-model="rule.data" />

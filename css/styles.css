@@ -107,3 +107,8 @@ body {
     z-index: 999;
     background: url("../pics/search.gif") no-repeat scroll 0% 0% transparent;
 }
+
+.littlemarge {
+    margin-top: 5px;
+    margin-bottom: 5px;    
+}

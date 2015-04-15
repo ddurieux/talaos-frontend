@@ -202,6 +202,9 @@ function TestCtrl($scope, $location, Restangular) {
     $scope.close = function () {
         EditCtrl($scope, $location, Restangular, $scope.item, 0);
     }
+    $scope.goAsset = function (asset_id) {
+        $location.url('/asset/edit/'+ asset_id);
+    }
 }
 
 function EditCtrl($scope, $location, Restangular, item, displaydetails) {
@@ -232,7 +235,7 @@ function EditCtrl($scope, $location, Restangular, item, displaydetails) {
                         ids.push($scope.child._items[key]['asset_right']);
                     }
                     $scope.child_categories = {};
-                    $scope.load_asset_assettype('asset?where={"id": ["' + ids.join('","') + '"]}');
+                    $scope.load_asset_assettype('asset?where={"id": ["' + ids.join('","') + '"]}&max_results=200');
                 }
             }
         });
