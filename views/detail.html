@@ -1,25 +1,22 @@
 <div ng-include="'menu.html'"></div>
-<div class="container">
-    <div class="row">
+<div class="container-fluid">
+    <div class="panel">
         <form class="form-horizontal">
-            <div class="well well-lg form-group">
-                <fieldset>
-                    <legend>{{item.name}} ({{item.asset_type.name}})</legend>
-                    <div class="row" >
-                        <div class="col-md-4" ng-repeat-start="property in properties">
-                            <div class="form-group">
-                                <label for="{{property.label_id}}" class="col-sm-4 control-label">{{property.label}}</label>
-                                <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="{{property.label_id}}" ng-model="property.value">
-                                </div>
-                            </div>        
-                        </div>
-                        <div class="clearfix" ng-if="$index%3==2"></div>
-                        <div ng-repeat-end=""></div>
-                    </div>                    
-                </fieldset>
+            <div class="panel property-title">{{item.asset_type.name}}</div>
+            <div class="well well-lg">
+                <div class="row" >
+                    <div class="col-md-4" ng-repeat-start="property in properties">
+                        <div class="form-group">
+                            <label for="{{property.label_id}}" class="col-sm-4 control-label">{{property.label}}</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="{{property.label_id}}" ng-model="property.value">
+                            </div>
+                        </div>        
+                    </div>
+                    <div class="clearfix" ng-if="$index%3==2"></div>
+                    <div ng-repeat-end=""></div>
+                </div>                    
             </div>      
-        <br>
         <!--
         <a href="#/{{item.route}}" class="btn btn-default">Cancel</a>
         <button ng-click="save()" ng-disabled="isClean() || myForm.$invalid"
@@ -31,9 +28,9 @@
 </div>
         
 <div class="container-fluid">
-    <div class="panel panel-default">
-        <div class="panel-heading">Children</div>
-        <div ng-if="child" class="panel-heading">
+    <div class="panel">
+        <div class="panel property-title">Children</div>
+        <div ng-if="child" class="panel-body" style="padding: 5px 15px 0px 15px;">
             <div class="row" >
                 <div class="col-md-3 properties" ng-repeat-start="(cname, cproperty) in child_categories">
                     <div ng-click='load_childcat(cname)'>
@@ -60,8 +57,8 @@
             </div>
         </div>
     </div>
-    <div class="panel panel-default">
-        <div class="panel-heading">Parents</div>
+    <div class="panel">
+        <div class="panel property-title">Parents</div>
         <div class="panel-body">
 
         </div>
