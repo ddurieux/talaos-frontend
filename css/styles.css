@@ -112,3 +112,57 @@ body {
     margin-top: 5px;
     margin-bottom: 5px;    
 }
+
+.properties {
+    height: 42px;
+    padding-right: 1px;
+    padding-left: 1px;
+}
+
+.property-number {
+    float : left;
+    height: 40px;
+    width: 40px;
+    text-align: center;
+    font-weight: bold;
+    line-height: 40px;
+}
+
+.property-number-1 {
+    background-color: #d8daff;
+}
+
+.property-number-2 {
+    background-color: #d2d4ff;
+}
+
+.property-number-3 {
+    background-color: #cbceff;
+}
+
+.property-number-4 {
+    background-color: #c5c8ff;
+}
+
+.property-number-5 {
+    background-color: #bfc3ff;
+}
+
+.property-number-6 {
+    background-color: #babdff;
+}
+
+.property-name {
+    background-color: #bababa;
+    height: 40px;
+    font-weight: bold;
+    text-indent:6px;
+    line-height: 40px;
+    text-transform: capitalize;
+}
+
+.property-glyphicon {
+    float : right;
+    width: 40px;
+    background-color: #555;
+}
