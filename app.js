@@ -113,12 +113,12 @@ app.controller('QueryBuilderCtrl', ['$scope', 'Restangular', '$http', '$rootScop
 
 
 function homePage($scope, Restangular) {
-   //$scope.items = Restangular.all("item").getList().$object;
-   $scope.items = {};
-   $scope.items["asset"] = {};
-   $scope.items["asset"]["menu"] = "Asset";
-   $scope.items["asset"]["name"] = "Asset";
-   $scope.items["asset"]["item"] = "asset";
+    
+    $scope.items = {};
+    $scope.items["asset"] = {};
+    $scope.items["asset"]["menu"] = "Asset";
+    $scope.items["asset"]["name"] = "Asset";
+    $scope.items["asset"]["item"] = "asset";
    
 }
 
