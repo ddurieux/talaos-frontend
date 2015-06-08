@@ -1,4 +1,4 @@
-var app = angular.module('asset', ['restangular', 'ngRoute', 'angular.filter', 'ui.bootstrap', 'ngSanitize', 'queryBuilder']);
+var app = angular.module('asset', ['restangular', 'ngRoute', 'angular.filter', 'ui.bootstrap', 'ngSanitize', 'queryBuilder', 'ngMaterial']);
         
 app.config(function($routeProvider, RestangularProvider) {
     $routeProvider.
@@ -184,16 +184,6 @@ function CreateCtrl($scope, $location, Restangular, item) {
   }
 }
 
-app.directive('dude', function($location, Restangular){
-  return {
-    restrict: "C"
-    , controller:TestCtrl
-    , scope: {
-        assetId: "="
-    }
-    , templateUrl:'views/detail2.html'
-  };
-});
 
 function TestCtrl($scope, $location, Restangular) {
     Restangular.one('asset', $scope.assetId).get({'embedded': '{"asset_type":1}'}).then(function(data) {
@@ -301,6 +291,11 @@ function EditCtrl($scope, $location, Restangular, item, displaydetails) {
             $scope.childcat[cat_name] = $scope.child_categories[cat_name];
         }
     }
+
+    $scope.goAsset = function (asset_id) {
+        $location.url('/asset/edit/'+ asset_id);
+    }
+    
 /*    
     $scope.foreignlist = {};
 
