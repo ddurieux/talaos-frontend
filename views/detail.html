@@ -1,12 +1,12 @@
 <div data-ng-include="'views/menu.html'"></div>
 
-<section data-ui-view>
-    <md-toolbar style="background: #E0E0E0">
+<section data-ui-view layout-fill style="padding-bottom: 2px;">
+    <md-toolbar style="background: #E0E0E0" class="md-whiteframe-z2">
         <h1 class="md-toolbar-tools" style="color: #303030">
           <span>{{item.asset_type.name}}</span>
         </h1>
-    </md-toolbar>    
-    <md-content layout-padding layout="column">
+    </md-toolbar>
+    <md-content layout-padding layout="column" class="md-whiteframe-z1">
         <form>
             <div layout layout-sm="column" flex style="flex-wrap: wrap">
                 <md-input-container ng-repeat="property in properties"
@@ -16,11 +16,8 @@
                 </md-input-container> 
             </div>
         </form>
-    </<md-content>
-</section> 
-
-<section layout="column">
-    <md-toolbar style="background: #E0E0E0">
+    </md-content>
+    <md-toolbar style="background: #E0E0E0" class="md-whiteframe-z2">
         <h1 class="md-toolbar-tools" style="color: #303030">
           Children
         </h1>
@@ -28,8 +25,7 @@
             <md-icon md-svg-src="bower_components/material-design-icons/content/svg/production/ic_add_24px.svg"></md-icon>
         </md-button>
     </md-toolbar>    
-
-    <md-content>
+    <md-content layout-padding class="md-whiteframe-z1">
         <div layout layout-sm="column" flex style="flex-wrap: wrap">
             <md-list ng-repeat="(cname, cproperty) in child_categories" style="padding-right: 10px;" 
                      flex-md="50" flex-lg="33" flex-gt-lg="20">
