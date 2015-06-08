@@ -1,15 +1,16 @@
 <div ng-include="'menu.html'"></div>
 
 <div layout="column">
-<md-toolbar>
-    <h1 class="md-toolbar-tools">
-      {{item.asset_type.name}}
+<md-toolbar style="background: #E0E0E0">
+    <h1 class="md-toolbar-tools" style="color: #303030">
+      <span>{{item.asset_type.name}}</span>
     </h1>
-</md-toolbar>
+</md-toolbar>    
 <md-content layout-padding layout="row" layout-sm="column">
     <form>
         <div layout layout-sm="column" flex style="flex-wrap: wrap">
-            <md-input-container ng-repeat="property in properties" style="min-width: 300px;">
+            <md-input-container ng-repeat="property in properties"
+                 flex="50" flex-gt-lg="33">
                 <label>{{property.label}}</label>
                 <input id="{{property.label_id}}" ng-model="property.value" />
             </md-input-container> 
@@ -19,20 +20,21 @@
 </div> 
 
 <div layout="column">
-<md-toolbar>
-    <h1 class="md-toolbar-tools">
+<md-toolbar style="background: #E0E0E0">
+    <h1 class="md-toolbar-tools" style="color: #303030">
       Children
     </h1>
     <md-button class="md-fab md-fab-top-right" aria-label="Add">
         <md-icon md-svg-src="bower_components/material-design-icons/content/svg/production/ic_add_24px.svg"></md-icon>
     </md-button>
-</md-toolbar>
+</md-toolbar>    
 
 <md-content>
     <div layout layout-sm="column" flex style="flex-wrap: wrap">
-        <md-list ng-repeat="(cname, cproperty) in child_categories" style="min-width: 400px;padding-right: 10px;">
+        <md-list ng-repeat="(cname, cproperty) in child_categories" style="padding-right: 10px;" 
+                 flex-md="50" flex-lg="33" flex-gt-lg="20">
             <md-list-item class="md-2-line" ng-click="load_childcat(cname)">
-                <div class="md-list-item-text"
+                <div class="md-list-item-text">
                     <h3>{{cname}}</h3>
                     <p>{{cproperty.length}} items</p>
                 </div>
