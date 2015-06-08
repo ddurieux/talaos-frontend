@@ -1,56 +1,56 @@
-<div ng-include="'menu.html'"></div>
+<div data-ng-include="'views/menu.html'"></div>
 
-<div layout="column">
-<md-toolbar style="background: #E0E0E0">
-    <h1 class="md-toolbar-tools" style="color: #303030">
-      <span>{{item.asset_type.name}}</span>
-    </h1>
-</md-toolbar>    
-<md-content layout-padding layout="row" layout-sm="column">
-    <form>
+<section data-ui-view>
+    <md-toolbar style="background: #E0E0E0">
+        <h1 class="md-toolbar-tools" style="color: #303030">
+          <span>{{item.asset_type.name}}</span>
+        </h1>
+    </md-toolbar>    
+    <md-content layout-padding layout="column">
+        <form>
+            <div layout layout-sm="column" flex style="flex-wrap: wrap">
+                <md-input-container ng-repeat="property in properties"
+                     flex="50" flex-gt-lg="33">
+                    <label>{{property.label}}</label>
+                    <input id="{{property.label_id}}" ng-model="property.value" />
+                </md-input-container> 
+            </div>
+        </form>
+    </<md-content>
+</section> 
+
+<section layout="column">
+    <md-toolbar style="background: #E0E0E0">
+        <h1 class="md-toolbar-tools" style="color: #303030">
+          Children
+        </h1>
+        <md-button class="md-fab md-fab-top-right" aria-label="Add">
+            <md-icon md-svg-src="bower_components/material-design-icons/content/svg/production/ic_add_24px.svg"></md-icon>
+        </md-button>
+    </md-toolbar>    
+
+    <md-content>
         <div layout layout-sm="column" flex style="flex-wrap: wrap">
-            <md-input-container ng-repeat="property in properties"
-                 flex="50" flex-gt-lg="33">
-                <label>{{property.label}}</label>
-                <input id="{{property.label_id}}" ng-model="property.value" />
-            </md-input-container> 
+            <md-list ng-repeat="(cname, cproperty) in child_categories" style="padding-right: 10px;" 
+                     flex-md="50" flex-lg="33" flex-gt-lg="20">
+                <md-list-item class="md-2-line" ng-click="load_childcat(cname)">
+                    <div class="md-list-item-text">
+                        <h3>{{cname}}</h3>
+                        <p>{{cproperty.length}} items</p>
+                    </div>
+                    <md-icon md-svg-src="bower_components/material-design-icons/content/svg/production/ic_add_circle_24px.svg" class="md-secondary"></md-icon>
+                </md-list-item>
+                <md-list-item class="md-2-line" ng-repeat="childitem in childcat[cname] | orderBy:'name'" ng-click="goAsset(childitem.id)">
+                    <md-icon md-svg-icon=""></md-icon>
+                    <div class="md-list-item-text">
+                        <h3 ng-if="childitem.name">{{childitem.name}}</h3>
+                        <h3 ng-if="!childitem.name"><i>No name</i></h3>
+                        <p>id: {{childitem.id}}</p>
+                    </div>
+                    <md-icon md-svg-src="bower_components/material-design-icons/action/svg/production/ic_delete_48px.svg"></md-icon>
+                </md-list-item>
+                <md-divider ></md-divider>
+            </md-list>
         </div>
-    </form>
-</<md-content>
-</div> 
-
-<div layout="column">
-<md-toolbar style="background: #E0E0E0">
-    <h1 class="md-toolbar-tools" style="color: #303030">
-      Children
-    </h1>
-    <md-button class="md-fab md-fab-top-right" aria-label="Add">
-        <md-icon md-svg-src="bower_components/material-design-icons/content/svg/production/ic_add_24px.svg"></md-icon>
-    </md-button>
-</md-toolbar>    
-
-<md-content>
-    <div layout layout-sm="column" flex style="flex-wrap: wrap">
-        <md-list ng-repeat="(cname, cproperty) in child_categories" style="padding-right: 10px;" 
-                 flex-md="50" flex-lg="33" flex-gt-lg="20">
-            <md-list-item class="md-2-line" ng-click="load_childcat(cname)">
-                <div class="md-list-item-text">
-                    <h3>{{cname}}</h3>
-                    <p>{{cproperty.length}} items</p>
-                </div>
-                <md-icon md-svg-src="bower_components/material-design-icons/content/svg/production/ic_add_circle_24px.svg" class="md-secondary"></md-icon>
-            </md-list-item>
-            <md-list-item class="md-2-line" ng-repeat="childitem in childcat[cname] | orderBy:'name'" ng-click="goAsset(childitem.id)">
-                <md-icon md-svg-icon=""></md-icon>
-                <div class="md-list-item-text">
-                    <h3 ng-if="childitem.name">{{childitem.name}}</h3>
-                    <h3 ng-if="!childitem.name"><i>No name</i></h3>
-                    <p>id: {{childitem.id}}</p>
-                </div>
-                <md-icon md-svg-src="bower_components/material-design-icons/action/svg/production/ic_delete_48px.svg"></md-icon>
-            </md-list-item>
-            <md-divider ></md-divider>
-        </md-list>
-    </div>
-</md-content>    
-</div> 
+    </md-content>    
+</section> 

@@ -28,46 +28,6 @@
     <div ng-app="asset">
     <div ng-view></div>
   
-    <script type="text/ng-template" id="menu.html">
-    <header class="navbar navbar-inverse">
-      <div class="navbar-inner">
-        <div class="container">
-          <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-3" ng-click="isCollapsed = !isCollapsed">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand visible-xs" href="#/">Talaos</a>
-          </div>
-          <nav class="hidden-xs">
-            <ul class="nav navbar-nav">
-              <a href="#/" role="button" class="navbar-brand">
-                  Talaos
-              </a>
-          <li ng-repeat="item in items | unique: 'menu' | orderBy:'menu'" ng-show="item.name" class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{item.menu}} <b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                  <li ng-repeat="item1 in items | orderBy:'name' | filter:{'menu':item.menu}" ng-show="item.name">
-                      <a href="#{{item1.item}}">{{item1.name}}</a>
-                  </li>
-              </ul>
-          </li>
-        </ul>
-    </div>
-</li>  
-          </ul>
-          </nav>
-      </div>
-    </header>
-   </script>
-
-
-   
-   
-  
-  
   
   </div>
 
