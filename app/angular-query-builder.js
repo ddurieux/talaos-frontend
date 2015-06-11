@@ -52,7 +52,7 @@ queryBuilder.directive('queryBuilder', ['$compile', '$http', function ($compile,
                     rule.data = asset_type_id;
                     httpget('asset_type_property?where={"asset_type_id": "' + asset_type_id + '"}', thisis);
                     
-//                    $http.get('http://192.168.20.144:5000/asset_type_property?where={"asset_type_id": "' + asset_type_id + '"}').
+//                    $http.get('http://10.0.20.9:5000/asset_type_property?where={"asset_type_id": "' + asset_type_id + '"}').
 //                        success(function(data) {
 //                            thisis.fields = data._items;
 //                            thisis.fields.unshift({'name': '[This type]', 'id': 0});

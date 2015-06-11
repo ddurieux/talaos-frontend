@@ -1,4 +1,4 @@
-<div data-ng-include="'views/menu.html'"></div>
+<div data-ng-include="'app/menu/menu.html'"></div>
 
 <section data-ui-view layout-fill style="padding-bottom: 2px;">
     <md-toolbar style="background: #E0E0E0" class="md-whiteframe-z2">
@@ -24,7 +24,7 @@
         <md-button class="md-fab md-fab-top-right" aria-label="Add">
             <md-icon md-svg-src="bower_components/material-design-icons/content/svg/production/ic_add_24px.svg"></md-icon>
         </md-button>
-    </md-toolbar>    
+    </md-toolbar>
     <md-content layout-padding class="md-whiteframe-z1">
         <div layout layout-sm="column" flex style="flex-wrap: wrap">
             <md-list ng-repeat="(cname, cproperty) in child_categories" style="padding-right: 10px;" 
