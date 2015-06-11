@@ -22,7 +22,7 @@
           Children
         </h1>
         <md-button class="md-fab md-fab-top-right" aria-label="Add">
-            <md-icon md-svg-src="bower_components/material-design-icons/content/svg/production/ic_add_24px.svg"></md-icon>
+            <i class="material-icons">add</i>
         </md-button>
     </md-toolbar>
     <md-content layout-padding class="md-whiteframe-z1">
@@ -34,7 +34,7 @@
                         <h3>{{cname}}</h3>
                         <p>{{cproperty.length}} items</p>
                     </div>
-                    <md-icon md-svg-src="bower_components/material-design-icons/content/svg/production/ic_add_circle_24px.svg" class="md-secondary"></md-icon>
+                    <i class="material-icons">add</i>
                 </md-list-item>
                 <md-list-item class="md-2-line" ng-repeat="childitem in childcat[cname] | orderBy:'name'" ng-click="goAsset(childitem.id)">
                     <md-icon md-svg-icon=""></md-icon>
@@ -43,7 +43,7 @@
                         <h3 ng-if="!childitem.name"><i>No name</i></h3>
                         <p>id: {{childitem.id}}</p>
                     </div>
-                    <md-icon md-svg-src="bower_components/material-design-icons/action/svg/production/ic_delete_48px.svg"></md-icon>
+                    <i class="material-icons">delete</i>
                 </md-list-item>
                 <md-divider ></md-divider>
             </md-list>
