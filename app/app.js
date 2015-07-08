@@ -7,6 +7,9 @@ var app = angular.module('talaos', [
     'ngMaterial',
     'talaos.config',
     'talaos.home',
+    'talaos.asset_type.new',
+    'talaos.asset_type.edit',
+    'talaos.asset_type.list',
     'talaos.assetlist',
     'talaos.assetdetail',
     'talaos.assetnew'

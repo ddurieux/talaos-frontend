@@ -1,0 +1,50 @@
+<div data-ng-include="'app/menu/menu.html'"></div>
+
+<section data-ui-view layout-fill style="padding-bottom: 2px;">
+    <md-toolbar style="background: #E0E0E0" class="md-whiteframe-z2">
+        <h1 class="md-toolbar-tools" style="color: #303030">
+          <span>Asset type</span>
+        </h1>
+    </md-toolbar>
+    <md-content layout-padding layout="column" class="md-whiteframe-z1">
+        <form>
+            <div layout layout-sm="column" flex style="flex-wrap: wrap">
+                <md-input-container flex="50" flex-gt-lg="33">
+                    <label>Name</label>
+                    <input id="{{item.name}}" ng-model="item.name" />
+                </md-input-container> 
+            </div>
+        </form>
+    </md-content>
+    <md-toolbar style="background: #E0E0E0" class="md-whiteframe-z2">
+        <h1 class="md-toolbar-tools" style="color: #303030">
+          Properties
+        </h1>
+        <md-button class="md-fab md-fab-top-right" aria-label="Add" ng-click="addProperty()">
+            <i class="material-icons">add</i>
+        </md-button>
+    </md-toolbar>
+    <md-content layout-padding layout="column" class="md-whiteframe-z1">
+        <form>
+            <div layout layout-sm="column" flex style="flex-wrap: wrap">
+                <div ng-repeat="property in properties" flex="50" flex-gt-lg="33">
+                    <md-input-container>
+                        <label>Name</label>
+                        <input id="{{property.name}}" ng-model="property.name" />
+                    </md-input-container> 
+                    <md-select placeholder="Type" ng-model="property.type">
+                      <md-option ng-repeat="(key, value) in types" value="{{key}}">{{value}}</md-option>
+                    </md-select>                    
+                </div>
+            </div>
+        </form>
+        
+        <section layout="row" layout-sm="column" layout-align="end end">
+            <md-button md-no-ink class="md-primary" ng-href="#/asset_type">< Back</md-button>
+            <md-button class="md-raised md-primary" ng-click="save()">SAVE</md-button>
+        </section>
+    </md-content>
+    
+</section> 
+
+
